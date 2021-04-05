@@ -5,6 +5,7 @@ import os
 
 class Post(models.Model):
     title = models.CharField(max_length=30)
+    hook_text = models.CharField(max_length=100, blank=True)
     content = models.TextField()
 
     # upload_to : 이미지를 저장할 폴더의 경로 규칙을 지정, blank=True를 하면 필수 항목이 아니게 된다
