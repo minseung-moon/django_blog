@@ -21,7 +21,9 @@ class Post(models.Model):
     # author : 추후 작성 예정
 
     # on_delete=models.CASCADE : 이 포스트의 작성자가 데이터베이스에서 삭제되었을 때 이 포스트도 같이 삭제
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    # on_delete=models.SET_NULL : 이 포스터의 작성자가 삭제되면 같이 삭제 되지 않고 뮤명 값으로 출력
+    # setNull 할 시 필드 값도 null 허동이 되어야 한다, null = True
+    author = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
 
     # django admin Post 모델 제목
     def __str__(self):
