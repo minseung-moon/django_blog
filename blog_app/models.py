@@ -4,6 +4,21 @@ from django.contrib.auth.models import User
 import os
 
 # Create your models here.
+# pip install django_extensions, django shell+, 설치 후 settings.py에 설정
+# pip install ipython, django shell+
+
+class Category(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+    # 사람이 읽을 수 있는 텍스트로 고유 URL을 만들고 싶을 때 주로 사용
+    # allow_unicode=True를 통해서 한글로도 만들 수 있게 지정, 없으면 한글 지원 안됨
+    slug = models.SlugField(max_length=200, unique=True, allow_unicode=True)
+
+    def __str__(self):
+        return self.name
+
+    # admin에 표시될 이름
+    class Meta:
+        verbose_name_plural = 'Categories'
 
 class Post(models.Model):
     title = models.CharField(max_length=30)
@@ -24,6 +39,9 @@ class Post(models.Model):
     # on_delete=models.SET_NULL : 이 포스터의 작성자가 삭제되면 같이 삭제 되지 않고 뮤명 값으로 출력
     # setNull 할 시 필드 값도 null 허동이 되어야 한다, null = True
     author = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+
+    # blank = True, 관리자 페이지에서 카테고리를 빈 칸으로 지정할  수 있게 해준다
+    category = models.ForeignKey(Category, null=True, blank=True, on_delete=models.SET_NULL)
 
     # django admin Post 모델 제목
     def __str__(self):
