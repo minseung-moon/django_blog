@@ -7,6 +7,16 @@ import os
 # pip install django_extensions, django shell+, 설치 후 settings.py에 설정
 # pip install ipython, django shell+
 
+class Tag(models.Model):
+    name = models.CharField(max_length=50)
+    slug = models.SlugField(max_length=200, unique=True, allow_unicode=True)
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return f'/blog/tag/{self.slug}/'
+
 class Category(models.Model):
     name = models.CharField(max_length=50, unique=True)
     # 사람이 읽을 수 있는 텍스트로 고유 URL을 만들고 싶을 때 주로 사용
@@ -15,6 +25,9 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return f'/blog/category/{self.slug}/'
 
     # admin에 표시될 이름
     class Meta:
@@ -42,6 +55,10 @@ class Post(models.Model):
 
     # blank = True, 관리자 페이지에서 카테고리를 빈 칸으로 지정할  수 있게 해준다
     category = models.ForeignKey(Category, null=True, blank=True, on_delete=models.SET_NULL)
+
+    # 서로 여러 요소와 동시에 연결될 수 있는 다대다 관계, ManyToManyField
+    # ManyToManyField는 기본적으로 null = True를 제공
+    tags = models.ManyToManyField(Tag, blank=True)
 
     # django admin Post 모델 제목
     def __str__(self):
