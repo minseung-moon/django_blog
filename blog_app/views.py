@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView
 # LoginRequiredMixin, 로그인 했을 때만 정상적으로 페이지가 보이도록 설정해주는 클래스
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Post, Category, Tag
+# 권한에 따른 처리, 만약에 권한이 없는데 접근하면 403 오류 메시지 출력
+from django.core.exceptions import PermissionDenied
 
 # Create your views here.
 
@@ -43,6 +45,19 @@ class PostCreate(LoginRequiredMixin ,CreateView):
             return super(PostCreate, self).form_valid(form)
         else :
             return redirect('/blog/')
+
+class PostUpdate(LoginRequiredMixin, UpdateView):
+    model = Post
+    fields = ['title', 'hook_text', 'content', 'head_image', 'file_upload', 'category', 'tags']
+    template_name = 'blog/post_update_form.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        # self.get_object(), updateview의 메소드로 post.object.get(pk=pk)랑 동일한 역할
+        # 갖고온 post의 인스턴스에 저장된 author과 방문자와 동일한지 확인
+        if request.user.is_authenticated and request.user == self.get_object().author:
+            return super(PostUpdate, self).dispatch(request, *args, **kwargs)
+        else :
+            raise PermissionDenied
 
 def category_page(request, slug):
         if slug == 'no_category' :
