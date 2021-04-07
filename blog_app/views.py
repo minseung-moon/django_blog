@@ -1,5 +1,7 @@
-from django.shortcuts import render
-from django.views.generic import ListView, DetailView
+from django.shortcuts import render, redirect
+from django.views.generic import ListView, DetailView, CreateView
+# LoginRequiredMixin, 로그인 했을 때만 정상적으로 페이지가 보이도록 설정해주는 클래스
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Post, Category, Tag
 
 # Create your views here.
@@ -25,6 +27,22 @@ class PostDetail(DetailView):
         context['categories'] = Category.objects.all()
         context['no_category_post_count'] = Post.objects.filter(category=None).count()
         return context
+
+class PostCreate(LoginRequiredMixin ,CreateView):
+    model = Post
+    template_name = 'blog/post_form.html'
+    fields = ['title', 'hook_text', 'content', 'head_image', 'file_upload', 'category']
+
+    def form_valid(self, form):
+        # self.request.user, 웹 사이트 방문자를 의미
+        current_user = self.request.user
+        
+        # is_authenticated, 방문자가 로그인 했는지 확인
+        if current_user.is_authenticated:
+            form.instance.author = current_user
+            return super(PostCreate, self).form_valid(form)
+        else :
+            return redirect('/blog/')
 
 def category_page(request, slug):
         if slug == 'no_category' :
