@@ -31,6 +31,8 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
+# pip install django-crispy-forms, form 꾸미는 외부라이브러리
+# 최하단에 추가 입력 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -41,6 +43,8 @@ INSTALLED_APPS = [
     'blog_app',
     'single_pages_app',
     'django_extensions',
+
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [
@@ -125,3 +129,4 @@ STATIC_URL = '/static/'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, '_media')
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
