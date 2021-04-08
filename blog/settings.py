@@ -32,7 +32,9 @@ ALLOWED_HOSTS = []
 # Application definition
 
 # pip install django-crispy-forms, form 꾸미는 외부라이브러리
-# 최하단에 추가 입력 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+# 최하단에 추가 입력 CRISPY_TEMPLATE_PACK = 'bootstrap4', 각 form template 수정
+# pip install django-markdownx, 마크다운 분법 적용 라이브러리(https://neutronx.github.io/django-markdownx/)
+# urls.py에 경로 추가, models.py에 수정, form 태블릿에 form.media 추가
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -45,6 +47,7 @@ INSTALLED_APPS = [
     'django_extensions',
 
     'crispy_forms',
+    'markdownx',
 ]
 
 MIDDLEWARE = [

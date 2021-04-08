@@ -2,6 +2,10 @@ from django.db import models
 # user model은 장고에서 기본적으로 제공하는 모델이다
 from django.contrib.auth.models import User
 import os
+# form 필드에 markdown을 입력할 필드
+from markdownx.models import MarkdownxField
+# form에 입력힌 내용이 그냥 보이지는 않으므로 get_content_markdown()매서드로 마크다운 적용
+from markdownx.utils import markdown
 
 # Create your models here.
 # pip install django_extensions, django shell+, 설치 후 settings.py에 설정
@@ -36,7 +40,7 @@ class Category(models.Model):
 class Post(models.Model):
     title = models.CharField(max_length=30)
     hook_text = models.CharField(max_length=100, blank=True)
-    content = models.TextField()
+    content = MarkdownxField()
 
     # upload_to : 이미지를 저장할 폴더의 경로 규칙을 지정, blank=True를 하면 필수 항목이 아니게 된다
     # python -m pip install Pillow
@@ -74,3 +78,7 @@ class Post(models.Model):
 
     def get_file_ext(self):
         return self.get_file_name().split('.')[-1]
+
+    # detail에 적용
+    def get_content_markdown(self):
+        return markdown(self.content)

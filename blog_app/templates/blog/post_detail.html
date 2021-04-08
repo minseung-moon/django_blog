@@ -42,7 +42,8 @@
   <hr>
 
   <!-- Post Content -->
-  <p>{{ post.content }}</p>
+  <!-- safe도 함께 입력하여 html 이스케이핑을 방지 -->
+  <p>{{ post.get_content_markdown | safe }}</p>
 
   {% if post.tags.exists %}
     <i class="fas fa-tags"></i>
