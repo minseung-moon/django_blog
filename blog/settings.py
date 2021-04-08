@@ -35,6 +35,7 @@ ALLOWED_HOSTS = []
 # 최하단에 추가 입력 CRISPY_TEMPLATE_PACK = 'bootstrap4', 각 form template 수정
 # pip install django-markdownx, 마크다운 분법 적용 라이브러리(https://neutronx.github.io/django-markdownx/)
 # urls.py에 경로 추가, models.py에 수정, form 태블릿에 form.media 추가
+# pip install django-allauth, 소셜 로그인 기능 라이브러리
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -45,9 +46,16 @@ INSTALLED_APPS = [
     'blog_app',
     'single_pages_app',
     'django_extensions',
+    'django.contrib.sites',
 
     'crispy_forms',
     'markdownx',
+
+    # 다른 서비스의 인증 방식(django-allauth.readthe-docs.io/en/latest/)참고
+    'allauth', 
+    'allauth.account', 
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google', 
 ]
 
 MIDDLEWARE = [
@@ -133,3 +141,15 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, '_media')
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+# 소셜 로그인 기능, urls.py 설정
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
+SITE_ID = 1
+
+ACCOUNT_EMAIL_REQUIRED=True # 이메일을 꼭 입력은 해줘야 한다
+ACCOUNT_EMAIL_VERIFICATION = 'none' # 이메일 검증은 진행하지 않는다
+LOGIN_REDIRECT_URL = '/blog/'
