@@ -11,6 +11,7 @@ urlpatterns = [
     path('/<int:pk>/new_comment/', views.new_comment),
     path('/update_comment/<int:pk>/', views.CommentUpdate.as_view()),
     path('/delete_comment/<int:pk>/', views.delete_comment),
+    path('/search/<str:q>/', views.PostSearch.as_view()),
     # path('/', views.index),
     # path('/<int:pk>/', views.single_post_page),
 ]
